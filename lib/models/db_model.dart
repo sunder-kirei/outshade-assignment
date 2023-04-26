@@ -15,7 +15,7 @@ class DbData {
     return DbData(
       uid: dataMap["uid"],
       age: dataMap["age"],
-      gender: dataMap["gender"],
+      gender: Gender.values[dataMap["gender"]],
     );
   }
 

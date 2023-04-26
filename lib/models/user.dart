@@ -21,14 +21,4 @@ class User {
       name: dataMap["name"] ?? "unknown",
     );
   }
-
-  set setAge(int age) {
-    this.age = age;
-    return;
-  }
-
-  set setGender(int gender) {
-    this.gender = gender;
-    return;
-  }
 }

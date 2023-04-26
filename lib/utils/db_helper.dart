@@ -1,18 +1,16 @@
-import 'dart:html';
-
 import 'package:outshade_assignment/models/db_model.dart';
-import 'package:outshade_assignment/models/enums.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBHelper {
   static const tableName = "user";
+
   static Future<Database> get getDb async {
     final db = await openDatabase(
       "user.db",
+      version: 1,
       onCreate: (db, version) async {
         await db.execute(
-          "CREATE TABLE ? (uid INTEGER PRIMARY KEY, age INTEGER, gender INTEGER)",
-          ["user"],
+          "CREATE TABLE ${DBHelper.tableName} (uid INTEGER PRIMARY KEY, age INTEGER, gender INTEGER)",
         );
       },
     );
@@ -20,20 +18,27 @@ class DBHelper {
   }
 
   static Future<int> insert({
-    required int uid,
-    required int age,
-    required Gender gender,
+    required DbData data,
   }) async {
     final db = await getDb;
-    final data = DbData(
-      uid: uid,
-      age: age,
-      gender: gender,
-    );
+
     final id = await db.insert(
       DBHelper.tableName,
       data.dataMap,
       conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return id;
+  }
+
+  static Future<int> remove({
+    required DbData data,
+  }) async {
+    final db = await getDb;
+
+    final id = await db.delete(
+      DBHelper.tableName,
+      where: "uid = ?",
+      whereArgs: [data.uid],
     );
     return id;
   }
