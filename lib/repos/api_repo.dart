@@ -1,4 +1,4 @@
-import 'package:outshade_assignment/models/user.dart';
+import 'package:outshade_assignment/providers/user.dart';
 import '../data/json_data.dart';
 
 class ApiRepo {

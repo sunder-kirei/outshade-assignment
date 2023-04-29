@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:outshade_assignment/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'providers/auth_provider.dart';
+import 'providers/user.dart';
+import 'providers/users.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => AuthProvider(),
+          create: (context) => Users(),
         ),
       ],
       child: MaterialApp(

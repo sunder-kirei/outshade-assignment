@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:outshade_assignment/models/enums.dart';
-import 'package:outshade_assignment/providers/auth_provider.dart';
+import 'package:outshade_assignment/providers/user.dart';
 import 'package:outshade_assignment/repos/api_repo.dart';
+import 'package:outshade_assignment/screens/auth_screen.dart';
+import 'package:outshade_assignment/screens/user_screen.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/users.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -10,15 +14,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final signInHandler = Provider.of<AuthProvider>(
-      context,
-      listen: false,
-    ).signIn;
-    final signOutHandler = Provider.of<AuthProvider>(
-      context,
-      listen: false,
-    ).signOut;
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Home"),
@@ -33,35 +28,48 @@ class HomeScreen extends StatelessWidget {
           final userList = snapshot.data;
           return ListView.builder(
             itemBuilder: (context, index) {
-              final data = userList[index];
-              return ListTile(
-                key: ValueKey(data.id),
-                title: Text(
-                  data.name,
-                ),
-                trailing: Consumer<AuthProvider>(
-                  builder: (context, value, child) {
-                    bool isSignedIn = value.isSignedIn(uid: data.id);
-                    return TextButton(
+              return ChangeNotifierProvider.value(
+                value: userList[index],
+                builder: (context, child) {
+                  final data = Provider.of<User>(context);
+                  final isSignedIn = data.isSignedIn;
+                  final signOutHandler = data.signOut;
+                  return ListTile(
+                    key: ValueKey(data.id),
+                    title: Text(
+                      data.name,
+                    ),
+                    onTap: isSignedIn
+                        ? () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => UserScreen(user: data),
+                              ),
+                            );
+                          }
+                        : null,
+                    trailing: TextButton(
                       onPressed: () {
                         isSignedIn
-                            ? signOutHandler(user: data)
-                            : signInHandler(
-                                age: 18,
-                                gender: Gender.male,
-                                user: data,
+                            ? signOutHandler()
+                            : Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => AuthScreen(
+                                    user: data,
+                                  ),
+                                ),
                               );
                       },
                       child: isSignedIn ? Text("Sign Out") : Text("Sign In"),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               );
             },
             itemCount: userList!.length,
           );
         },
-        future: ApiRepo.getUsers,
+        future: Provider.of<Users>(context).users,
       ),
     );
   }
