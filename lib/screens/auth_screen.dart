@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:outshade_assignment/models/enums.dart';
@@ -38,13 +40,13 @@ class _AuthScreenState extends State<AuthScreen> {
       return;
     }
 
-    if (_age == null || _gender == null) {
+    if (_age == null) {
       return;
     }
 
     await widget.user.signIn(
       age: _age!,
-      gender: _gender!,
+      gender: _gender,
     );
     Navigator.of(context).pop();
     return;
@@ -64,8 +66,8 @@ class _AuthScreenState extends State<AuthScreen> {
     final title = gender.title;
 
     return DropdownMenuItem(
-      child: Text(title),
       value: gender,
+      child: Text(title),
     );
   }
 
@@ -82,14 +84,14 @@ class _AuthScreenState extends State<AuthScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text("Enter your age"),
+              const Text("Enter your age"),
               Form(
                 key: _key,
                 child: TextFormField(
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: "Enter age",
                     labelText: "Enter age",
                   ),
@@ -98,12 +100,12 @@ class _AuthScreenState extends State<AuthScreen> {
                   onChanged: changeHandler,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Select your gender"),
-                  SizedBox(width: 20),
+                  const Text("Select your gender"),
+                  const SizedBox(width: 20),
                   DropdownButton(
                     items: Gender.values
                         .map(
@@ -117,15 +119,15 @@ class _AuthScreenState extends State<AuthScreen> {
                         },
                       );
                     },
-                    hint: Text("Pick your gender"),
+                    hint: const Text("Pick your gender"),
                     value: _gender,
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: signInHandler,
-                child: Text("Sign In"),
+                child: const Text("Sign In"),
               ),
             ],
           ),

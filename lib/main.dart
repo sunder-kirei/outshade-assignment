@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:outshade_assignment/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'providers/user.dart';
 import 'providers/users.dart';
 
 void main() {
@@ -23,10 +22,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(useMaterial3: true),
-        home: HomeScreen(),
-        // routes: {
-        //   HomeScreen.routeName: (context) => const HomeScreen(),
-        // },
+        home: const HomeScreen(),
       ),
     );
   }

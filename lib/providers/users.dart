@@ -4,8 +4,6 @@ import 'package:outshade_assignment/repos/api_repo.dart';
 import 'package:outshade_assignment/utils/db_helper.dart';
 
 class Users with ChangeNotifier {
-  List<User> _userList = [];
-
   Future<List<User>> get users async {
     var userList = await ApiRepo.getUsers;
     var signedInUser = await DBHelper.allUsers;
